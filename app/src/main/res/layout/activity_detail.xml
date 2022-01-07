@@ -44,6 +44,32 @@
         android:gravity="center" />
 
     <Button
+        android:id="@+id/buttontime1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="popTimePicker"
+        android:text="시작 시간 설정하기" />
+
+    <TextView
+        android:id="@+id/timedata1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <Button
+        android:id="@+id/buttontime2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="popTimePicker2"
+        android:text="종료시간 설정하기" />
+
+    <TextView
+        android:id="@+id/timedata2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
