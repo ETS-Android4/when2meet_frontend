@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">when2meet</string>
+    <string name="kakao_app_key">	484da960687d78e1dc715e17f13410fd</string>
 </resources>
