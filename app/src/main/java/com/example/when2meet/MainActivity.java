@@ -1,6 +1,8 @@
 package com.example.when2meet;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -26,7 +28,7 @@ import kotlin.jvm.functions.Function2;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private View loginButton, logoutButton;
+    private View loginButton, logoutButton, selectButton;
     private TextView nickname;
     private ImageView profileImage;
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.logout);
         nickname = findViewById(R.id.nickname);
         profileImage = findViewById(R.id.profile);
+        selectButton = findViewById(R.id.toselect);
 
         Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
             @Override
@@ -78,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        selectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SelectActivity.class);
+                startActivity(intent);
+            }
+        });
         updateKakaoLoginUi();
 
     }
@@ -95,11 +105,13 @@ public class MainActivity extends AppCompatActivity {
                     Glide.with(profileImage).load(user.getKakaoAccount().getProfile().getThumbnailImageUrl()).circleCrop().into(profileImage);
                     loginButton.setVisibility(View.GONE);
                     logoutButton.setVisibility(View.VISIBLE);
+                    selectButton.setVisibility(View.VISIBLE);
                 } else {
                     nickname.setText(null);
                     profileImage.setImageBitmap(null);
                     loginButton.setVisibility(View.VISIBLE);
                     logoutButton.setVisibility(View.GONE);
+                    selectButton.setVisibility(View.GONE);
                 }
                 if (throwable != null) {
                     Log.w(TAG, "invoke: " + throwable.getLocalizedMessage());
