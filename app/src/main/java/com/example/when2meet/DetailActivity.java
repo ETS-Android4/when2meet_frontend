@@ -4,23 +4,30 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     TextView text1 = null, text2 = null, text3 = null, text4 = null, text5 = null;
+    TextView timetext1 = null, timetext2 = null;
     Button button1, button3;
     int i=0;
+    Button timeButton;
+    int hour1 = 0, hour2 = 24, minute1, minute2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +39,11 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
         text3 = findViewById(R.id.textView_date3);
         text4 = findViewById(R.id.textView_date4);
         text5 = findViewById(R.id.textView_date5);
+        timetext1 = findViewById(R.id.timedata1);
+        timetext2 = findViewById(R.id.timedata2);
         button1 = findViewById(R.id.button1);
         button3 = findViewById(R.id.button3);
+        timeButton = findViewById(R.id.buttontime1);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,5 +302,54 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
             }
         }
         return true;
+    }
+    public void popTimePicker(View view)
+    {
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener()
+        {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute)
+            {
+                hour1 = selectedHour;
+                minute1 = selectedMinute;
+                if(hour1>=hour2){
+                    hour1 = 0;
+                    Toast.makeText(DetailActivity.this, "시작 시간이 종료 시간 보다 느려 0시로 설정했어요.", Toast.LENGTH_SHORT).show();
+                }
+                timetext1.setText(String.format(Locale.getDefault(), "%02d:%02d",hour1, 0));
+            }
+        };
+
+        int style = AlertDialog.THEME_HOLO_DARK;
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, style, onTimeSetListener, hour1, 0, true);
+
+        timePickerDialog.setTitle("Select Time");
+        timePickerDialog.show();
+    }
+
+    public void popTimePicker2(View view)
+    {
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener()
+        {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute)
+            {
+                hour2 = selectedHour;
+                minute2 = selectedMinute;
+                if(hour1>=hour2){
+                    hour2 = 24;
+                    Toast.makeText(DetailActivity.this, "종료 시간이 시작 시간 보다 빨라 24시로 설정했어요.", Toast.LENGTH_SHORT).show();
+                }
+                timetext2.setText(String.format(Locale.getDefault(), "%02d:%02d",hour2, 0));
+            }
+        };
+
+        int style = AlertDialog.THEME_HOLO_DARK;
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, style, onTimeSetListener, hour2, 0, true);
+
+        timePickerDialog.setTitle("Select Time");
+        timePickerDialog.show();
     }
 }
