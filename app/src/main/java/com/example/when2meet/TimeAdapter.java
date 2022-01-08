@@ -23,6 +23,10 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public List<ToggleItem> getList() {
+        return dataList;
+    }
+
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.time_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
