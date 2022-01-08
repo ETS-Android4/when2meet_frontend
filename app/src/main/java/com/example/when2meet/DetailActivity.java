@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -56,6 +57,29 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetailActivity.this, TimeActivity.class);
+                intent.putExtra("start",hour1);
+                intent.putExtra("finish",hour2);
+                intent.putExtra("number",i);
+                if(text1 != null)
+                {
+                    intent.putExtra("text1",text1.getText().toString());
+                }
+                if(text2 != null)
+                {
+                    intent.putExtra("text2",text2.getText().toString());
+                }
+                if(text3 != null)
+                {
+                    intent.putExtra("text3",text3.getText().toString());
+                }
+                if(text4 != null)
+                {
+                    intent.putExtra("text4",text4.getText().toString());
+                }
+                if(text5 != null)
+                {
+                    intent.putExtra("text5",text5.getText().toString());
+                }
                 startActivity(intent);
             }
         });
