@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.lang.reflect.Member;
@@ -18,7 +20,8 @@ public class TimeActivity extends AppCompatActivity {
     TextView day1, day2, day3, day4, day5;
     int hour1, hour2, num, i;
     String date1, date2, date3, date4, date5;
-
+    Button uploadButton;
+    List<ToggleItem> jsondata;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +31,16 @@ public class TimeActivity extends AppCompatActivity {
         day3 = findViewById(R.id.day3);
         day4 = findViewById(R.id.day4);
         day5 = findViewById(R.id.day5);
+        uploadButton = findViewById(R.id.uploadbutton);
+
+        uploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                jsondata = timeadapter1.getList();
+                Boolean b = jsondata.get(0).getBool1();
+                System.out.println(b);
+            }
+        });
 
         Intent intent = getIntent();
 

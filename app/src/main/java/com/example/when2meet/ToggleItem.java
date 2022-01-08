@@ -21,7 +21,16 @@ public class ToggleItem {
         return mText2;
     }
 
+    public Boolean getBool1() {
+        return bool1;
+    }
+
+    public Boolean getBool2() {
+        return bool2;
+    }
+
     public void setBool1(Boolean b) {
+        System.out.println(bool1);
         this.bool1 = b;
         System.out.println(mText1);
         System.out.println(bool1);
@@ -29,6 +38,7 @@ public class ToggleItem {
     }
 
     public void setBool2(Boolean b) {
+        System.out.println(bool2);
         this.bool2 = b;
         System.out.println(mText1);
         System.out.println(bool2);
