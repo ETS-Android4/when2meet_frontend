@@ -81,24 +81,38 @@ public class TimeActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        ArrayList<ToggleItem> dataList = new ArrayList<ToggleItem>();
+        ArrayList<ToggleItem> dataList1 = new ArrayList<ToggleItem>();
+        ArrayList<ToggleItem> dataList2 = new ArrayList<ToggleItem>();
+        ArrayList<ToggleItem> dataList3 = new ArrayList<ToggleItem>();
+        ArrayList<ToggleItem> dataList4 = new ArrayList<ToggleItem>();
+        ArrayList<ToggleItem> dataList5 = new ArrayList<ToggleItem>();
+
         for(int i= hour1; i<hour2; i++) {
-            ToggleItem item = new ToggleItem(Integer.toString(i), Integer.toString(i+1));
-            dataList.add(item);
+            ToggleItem item1 = new ToggleItem(date1,Integer.toString(i), Integer.toString(i+1),false, false);
+            dataList1.add(item1);
+            ToggleItem item2 = new ToggleItem(date2,Integer.toString(i), Integer.toString(i+1),false, false);
+            dataList2.add(item2);
+            ToggleItem item3 = new ToggleItem(date3,Integer.toString(i), Integer.toString(i+1),false, false);
+            dataList3.add(item3);
+            ToggleItem item4 = new ToggleItem(date4,Integer.toString(i), Integer.toString(i+1),false, false);
+            dataList4.add(item4);
+            ToggleItem item5 = new ToggleItem(date5,Integer.toString(i), Integer.toString(i+1),false, false);
+            dataList5.add(item5);
         }
         System.out.println("here!!!!");
         System.out.println(num);
-        System.out.println(dataList);
+        System.out.println(dataList1);
         for(int k=0; k<i; k++) {
             if (k == 0) {
-                timeadapter1.submitList(dataList);
+                timeadapter1.submitList(dataList1);
             }else if(k==1){
-                timeadapter2.submitList(dataList);
+                timeadapter2.submitList(dataList2);
             }else if(k==2){
-                timeadapter3.submitList(dataList);
+                timeadapter3.submitList(dataList3);
             }else if(k==3){
-                timeadapter4.submitList(dataList);
-            }else{timeadapter5.submitList(dataList);
+                timeadapter4.submitList(dataList4);
+            }else{
+                timeadapter5.submitList(dataList5);
             }
         }
 
