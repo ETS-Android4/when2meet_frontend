@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.when2meet.Retrofit.CallRetrofit;
+import com.example.when2meet.Retrofit.Model__Profile;
 import com.kakao.sdk.auth.LoginClient;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public Unit invoke(User user, Throwable throwable) {
                 if (user != null) {
+                    // logged in successfully
                     Log.i(TAG, "invoke: id=" + user.getId());
                     Log.i(TAG, "invoke: email=" + user.getKakaoAccount().getEmail());
                     Log.i(TAG, "invoke: nickname=" + user.getKakaoAccount().getProfile().getNickname());
@@ -106,7 +109,20 @@ public class MainActivity extends AppCompatActivity {
                     loginButton.setVisibility(View.GONE);
                     logoutButton.setVisibility(View.VISIBLE);
                     selectButton.setVisibility(View.VISIBLE);
+
+                    Model__Profile profile = new Model__Profile();
+                    profile.setUserId(user.getId());
+                    profile.setName(user.getKakaoAccount().getProfile().getNickname());
+                    profile.setEmail(user.getKakaoAccount().getEmail());
+                    profile.setImageUrl(user.getKakaoAccount().getProfile().getThumbnailImageUrl());
+                    profile.setGender(true);
+                    profile.setAge(21);
+
+                    CallRetrofit retrofitClient = new CallRetrofit();
+                    retrofitClient.postProfileFunction(profile);
+
                 } else {
+                    // logout
                     nickname.setText(null);
                     profileImage.setImageBitmap(null);
                     loginButton.setVisibility(View.VISIBLE);
