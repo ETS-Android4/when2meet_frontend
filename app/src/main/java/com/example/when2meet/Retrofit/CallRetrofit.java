@@ -3,7 +3,9 @@ package com.example.when2meet.Retrofit;
 import android.util.Log;
 
 import com.example.when2meet.Retrofit.Models.Model__CheckAlready;
+import com.example.when2meet.Retrofit.Models.Model__PostSchedule;
 import com.example.when2meet.Retrofit.Models.Model__Profile;
+import com.example.when2meet.Retrofit.Models.Model__PutSchedule;
 import com.example.when2meet.Retrofit.Models.Model__Schedule;
 import com.google.gson.Gson;
 
@@ -15,6 +17,43 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CallRetrofit {
+    public void updateSchedule(Model__PutSchedule schedule) {
+        Call<Model__PutSchedule> call = RetrofitClient.getApiService().putToSchedule(schedule.getScheduleId(), schedule);
+        call.enqueue(new Callback<Model__PutSchedule>() {
+            @Override
+            public void onResponse(Call<Model__PutSchedule> call, Response<Model__PutSchedule> response) {
+                if(!response.isSuccessful()){
+                    Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                    return;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Model__PutSchedule> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void postScheduleFunction(Model__PostSchedule schedule, ArrayList<String> schedule_id) {
+        Call<Model__PostSchedule> call = RetrofitClient.getApiService().postSchedule(schedule);
+        call.enqueue(new Callback<Model__PostSchedule>() {
+            @Override
+            public void onResponse(Call<Model__PostSchedule> call, Response<Model__PostSchedule> response) {
+                if(!response.isSuccessful()){
+                    Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                    return;
+                }
+                Model__PostSchedule schedule = response.body();
+                schedule_id.add(schedule.getId());
+            }
+
+            @Override
+            public void onFailure(Call<Model__PostSchedule> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
     public boolean callPhoneAlreadyCheck(String phoneNumber){
         boolean isRight = false;
 
@@ -64,9 +103,8 @@ public class CallRetrofit {
         });
     }
 
-    public Model__Profile getProfileWithUserId(Model__Profile profile) {
-        final Model__Profile[] model = new Model__Profile[1];
-        Call<Model__Profile> call = RetrofitClient.getApiService().getProfileWithId(String.valueOf(profile.getUserId()));
+    public void getNameWithUserId(String userId, ArrayList<String> userNames) {
+        Call<Model__Profile> call = RetrofitClient.getApiService().getProfileWithId(String.valueOf(userId));
         call.enqueue(new Callback<Model__Profile>() {
             @Override
             public void onResponse(Call<Model__Profile> call, Response<Model__Profile> response) {
@@ -74,7 +112,9 @@ public class CallRetrofit {
                     Log.e("연결이 비정상적 : ", "error code : " + response.code());
                     return;
                 }
-                model[0] = response.body();
+
+                Model__Profile profile = response.body();
+                userNames.add(profile.getName());
             }
 
             @Override
@@ -83,12 +123,10 @@ public class CallRetrofit {
                 t.printStackTrace();
             }
         });
-
-        return model[0];
     }
 
-    public ArrayList<Model__Schedule> getAllSchedulesFunc() {
-        final ArrayList<Model__Schedule>[] schedules = new ArrayList[]{new ArrayList<Model__Schedule>()};
+
+    public void getAllSchedulesFunc(ArrayList<Model__Schedule> returnVal) {
         Call<List<Model__Schedule>> call = RetrofitClient.getApiService().getAllSchedules();
         call.enqueue(new Callback<List<Model__Schedule>>(){
             @Override
@@ -97,10 +135,12 @@ public class CallRetrofit {
                     Log.e("연결이 비정상적 : ", "error code : " + response.code());
                     return;
                 }
-                schedules[0] = (ArrayList<Model__Schedule>) response.body();
-                for(int i=0; i<schedules[0].size(); ++i){
-                    Log.d("schedule[0]", schedules[0].get(i).getTitle());
+                ArrayList<Model__Schedule> schedules = (ArrayList<Model__Schedule>) response.body();
+                for(Model__Schedule sched: schedules){
+                    Log.d("AAAAAAA", sched.getTitle());
+                    returnVal.add(sched);
                 }
+                Log.e("스케듈 크기" , String.valueOf(returnVal.size()));
             }
 
             @Override
@@ -108,8 +148,6 @@ public class CallRetrofit {
                 t.printStackTrace();
             }
         });
-
-        return schedules[0];
     }
 
 }

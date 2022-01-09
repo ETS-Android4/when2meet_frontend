@@ -12,10 +12,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.when2meet.Retrofit.CallRetrofit;
 import com.example.when2meet.Retrofit.Models.Model__Profile;
+import com.example.when2meet.Retrofit.Models.Model__Schedule;
 import com.kakao.sdk.auth.LoginClient;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.User;
+
+import java.util.ArrayList;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -26,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private View loginButton, logoutButton, selectButton;
     private TextView nickname;
     private ImageView profileImage;
-
+    private Long userId;
+    String userName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SelectActivity.class);
+                intent.putExtra("userId",userId);
+                intent.putExtra("userName",userName);
                 startActivity(intent);
             }
         });
@@ -97,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "invoke: nickname=" + user.getKakaoAccount().getProfile().getNickname());
                     Log.i(TAG, "invoke: gender=" + user.getKakaoAccount().getGender());
                     Log.i(TAG, "invoke: age=" + user.getKakaoAccount().getAgeRange());
+                    userId = user.getId();
+                    userName = user.getKakaoAccount().getProfile().getNickname();
                     nickname.setText(user.getKakaoAccount().getProfile().getNickname());
                     Glide.with(profileImage).load(user.getKakaoAccount().getProfile().getThumbnailImageUrl()).circleCrop().into(profileImage);
                     loginButton.setVisibility(View.GONE);
@@ -111,8 +119,9 @@ public class MainActivity extends AppCompatActivity {
 
                     CallRetrofit retrofitClient = new CallRetrofit();
                     retrofitClient.postProfileFunction(profile);
-                    retrofitClient.getProfileWithUserId(profile);
-                    retrofitClient.getAllSchedulesFunc();
+
+                    ArrayList<Model__Schedule> schedules = new ArrayList<Model__Schedule>();
+
 
                 } else {
                     // logout

@@ -1,5 +1,6 @@
 package com.example.when2meet;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -9,13 +10,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.example.when2meet.Retrofit.CallRetrofit;
+import com.example.when2meet.Retrofit.Models.Model__PostSchedule;
+import com.example.when2meet.Retrofit.Models.Model__Schedule;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,6 +37,9 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
     int i=0;
     Button timeButton;
     int hour1 = 0, hour2 = 24, minute1, minute2;
+    EditText appointName;
+    Long userId;
+    String scheduleId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +56,11 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
         button1 = findViewById(R.id.button1);
         button3 = findViewById(R.id.button3);
         timeButton = findViewById(R.id.buttontime1);
+        appointName = findViewById(R.id.editText);
+        Intent intent = getIntent();
+        System.out.println("userId!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        userId = intent.getExtras().getLong("userId");
+        System.out.println(userId);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,31 +72,72 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DetailActivity.this, TimeActivity.class);
-                intent.putExtra("start",hour1);
-                intent.putExtra("finish",hour2);
-                intent.putExtra("number",i);
-                if(text1 != null)
-                {
-                    intent.putExtra("text1",text1.getText().toString());
+                ArrayList<String> dayarray = new ArrayList<String>();
+                for(int l=1; l<=i; l++){
+                    if(l==1){
+                        dayarray.add(text1.getText().toString());
+                    }else if(l==2){
+                        dayarray.add(text2.getText().toString());
+                    }else if(l==3){
+                        dayarray.add(text3.getText().toString());
+                    }
+                    else if(l==4){
+                        dayarray.add(text4.getText().toString());
+                    }else{
+                        dayarray.add(text5.getText().toString());
+                    }
                 }
-                if(text2 != null)
+                Model__PostSchedule schedule = new Model__PostSchedule();
+                schedule.setDays(dayarray);
+                schedule.setTitle(appointName.getText().toString());
+                schedule.setStart_time(Integer.toString(hour1)+":00");
+                schedule.setEnd_time(Integer.toString(hour2)+":00");
+
+                CallRetrofit retrofitClient = new CallRetrofit();
+                ArrayList<String> schId = new ArrayList<String>();
+                retrofitClient.postScheduleFunction(schedule, schId);
+
+                new Handler().postDelayed(new Runnable()
                 {
-                    intent.putExtra("text2",text2.getText().toString());
-                }
-                if(text3 != null)
-                {
-                    intent.putExtra("text3",text3.getText().toString());
-                }
-                if(text4 != null)
-                {
-                    intent.putExtra("text4",text4.getText().toString());
-                }
-                if(text5 != null)
-                {
-                    intent.putExtra("text5",text5.getText().toString());
-                }
-                startActivity(intent);
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void run()
+                    {
+                        scheduleId = schId.get(0);
+                        System.out.println("scheduleId11111");
+                        System.out.println(scheduleId);
+                        Intent intent = new Intent(DetailActivity.this, TimeActivity.class);
+                        intent.putExtra("name",appointName.getText().toString());
+                        intent.putExtra("start",hour1);
+                        intent.putExtra("finish",hour2);
+                        intent.putExtra("number",i);
+                        intent.putExtra("userId",userId);
+                        intent.putExtra("scheduleId",scheduleId);
+                        if(text1 != null)
+                        {
+                            intent.putExtra("text1",text1.getText().toString());
+                        }
+                        if(text2 != null)
+                        {
+                            intent.putExtra("text2",text2.getText().toString());
+                        }
+                        if(text3 != null)
+                        {
+                            intent.putExtra("text3",text3.getText().toString());
+                        }
+                        if(text4 != null)
+                        {
+                            intent.putExtra("text4",text4.getText().toString());
+                        }
+                        if(text5 != null)
+                        {
+                            intent.putExtra("text5",text5.getText().toString());
+                        }
+                        startActivity(intent);
+                    }
+                }, 500);
+                //aaaaaaaaaaaaaaaaaaa
+
             }
         });
 
@@ -253,7 +310,7 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         month++;
         i++;
-        String date = year + "/" + month + "/" + dayOfMonth;
+        String date = year + "-" + month + "-" + dayOfMonth;
         if(i==1) {
             if(!checkValid(date)){
                 date = null;

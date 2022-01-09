@@ -2,6 +2,7 @@ package com.example.when2meet;
 
 public class ToggleItem {
     private String mText1;
+
     private String mText2;
     private String datetext;
     private Boolean bool1 , bool2;
@@ -27,6 +28,22 @@ public class ToggleItem {
 
     public Boolean getBool2() {
         return bool2;
+    }
+
+    public String getDatetext() {
+        return datetext;
+    }
+
+    public void setmText1(String mText1) {
+        this.mText1 = mText1;
+    }
+
+    public void setmText2(String mText2) {
+        this.mText2 = mText2;
+    }
+
+    public void setDatetext(String datetext) {
+        this.datetext = datetext;
     }
 
     public void setBool1(Boolean b) {
