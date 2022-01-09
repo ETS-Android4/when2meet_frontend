@@ -5,9 +5,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.when2meet.Retrofit.CallRetrofit;
+import com.example.when2meet.Retrofit.Models.Model__PutSchedule;
+import com.example.when2meet.Retrofit.Models.Model__PutTimeslot;
+import com.example.when2meet.Retrofit.Models.Model__Schedule;
 
 import java.lang.reflect.Member;
 import java.util.ArrayList;
@@ -18,14 +24,26 @@ public class TimeActivity extends AppCompatActivity {
     TimeAdapter timeadapter1, timeadapter2, timeadapter3, timeadapter4, timeadapter5;
     RecyclerView toggles1, toggles2, toggles3, toggles4, toggles5;
     TextView day1, day2, day3, day4, day5;
-    int hour1, hour2, num, i;
-    String date1, date2, date3, date4, date5;
+    int hour1, hour2, num, dayi;
+    String appointName, date1, date2, date3, date4, date5;
     Button uploadButton;
     List<ToggleItem> jsondata;
+    Long userId;
+    String scheduleId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time);
+        Intent intent = getIntent();
+        userId = intent.getExtras().getLong("userId");
+        System.out.println("userId!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(userId);
+        appointName = intent.getExtras().getString("name");
+        hour1 = intent.getExtras().getInt("start");
+        hour2 = intent.getExtras().getInt("finish");
+        dayi = intent.getExtras().getInt("number");
+        scheduleId = intent.getExtras().getString("scheduleId");
+        num = hour2 - hour1;
         day1 = findViewById(R.id.day1);
         day2 = findViewById(R.id.day2);
         day3 = findViewById(R.id.day3);
@@ -36,18 +54,102 @@ public class TimeActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                jsondata = timeadapter1.getList();
-                Boolean b = jsondata.get(0).getBool1();
-                System.out.println(b);
+//                jsondata = timeadapter1.getList();
+//                Boolean b = jsondata.get(0).getBool1();
+//                System.out.println(b);
+
+                CallRetrofit retrofitClient = new CallRetrofit();
+                Model__PutSchedule schedule = new Model__PutSchedule();
+                ArrayList<Model__PutTimeslot> contents = new ArrayList<Model__PutTimeslot>();
+                schedule.setScheduleId(scheduleId);
+                schedule.setUserId(Long.toString(userId));
+                System.out.println("dayi!!!!!!!!!!!!");
+                System.out.println(dayi);
+                System.out.println("num!!!!!!!!!!!!!!!");
+                System.out.println(num);
+                for(int d=1; d<=dayi; d++) {
+                    for (int h=0; h<num; h++) {
+                        if(d==1) {
+                            jsondata = timeadapter1.getList();
+                            Model__PutTimeslot addcontent00 = new Model__PutTimeslot();
+                            addcontent00.setDay(date1);
+                            addcontent00.setTime(Integer.toString(hour1+h)+":00");
+                            addcontent00.setAvailable(jsondata.get(h).getBool1());
+                            System.out.println("!!!!!!!!!!!!!!!!!!!!");
+                            contents.add(addcontent00);
+                            Model__PutTimeslot addcontent30 = new Model__PutTimeslot();
+                            addcontent30.setDay(date1);
+                            addcontent30.setTime(Integer.toString(hour1+h)+":30");
+                            addcontent30.setAvailable(jsondata.get(h).getBool2());
+                            contents.add(addcontent30);
+                        }else if(d==2) {
+                            jsondata = timeadapter2.getList();
+                            Model__PutTimeslot addcontent00 = new Model__PutTimeslot();
+                            addcontent00.setDay(date2);
+                            addcontent00.setTime(Integer.toString(hour1+h)+":00");
+                            addcontent00.setAvailable(jsondata.get(h).getBool1());
+                            contents.add(addcontent00);
+                            Model__PutTimeslot addcontent30 = new Model__PutTimeslot();
+                            addcontent30.setDay(date2);
+                            addcontent30.setTime(Integer.toString(hour1+h)+":30");
+                            addcontent30.setAvailable(jsondata.get(h).getBool2());
+                            contents.add(addcontent30);
+                        }else if(d==3) {
+                            jsondata = timeadapter3.getList();
+                            Model__PutTimeslot addcontent00 = new Model__PutTimeslot();
+                            addcontent00.setDay(date3);
+                            addcontent00.setTime(Integer.toString(hour1+h)+":00");
+                            addcontent00.setAvailable(jsondata.get(h).getBool1());
+                            contents.add(addcontent00);
+                            Model__PutTimeslot addcontent30 = new Model__PutTimeslot();
+                            addcontent30.setDay(date3);
+                            addcontent30.setTime(Integer.toString(hour1+h)+":30");
+                            addcontent30.setAvailable(jsondata.get(h).getBool2());
+                            contents.add(addcontent30);
+                        }else if(d==4) {
+                            jsondata = timeadapter4.getList();
+                            Model__PutTimeslot addcontent00 = new Model__PutTimeslot();
+                            addcontent00.setDay(date4);
+                            addcontent00.setTime(Integer.toString(hour1+h)+":00");
+                            addcontent00.setAvailable(jsondata.get(h).getBool1());
+                            contents.add(addcontent00);
+                            Model__PutTimeslot addcontent30 = new Model__PutTimeslot();
+                            addcontent30.setDay(date4);
+                            addcontent30.setTime(Integer.toString(hour1+h)+":30");
+                            addcontent30.setAvailable(jsondata.get(h).getBool2());
+                            contents.add(addcontent30);
+                        }else {
+                            jsondata = timeadapter5.getList();
+                            Model__PutTimeslot addcontent00 = new Model__PutTimeslot();
+                            addcontent00.setDay(date5);
+                            addcontent00.setTime(Integer.toString(hour1+h)+":00");
+                            addcontent00.setAvailable(jsondata.get(h).getBool1());
+                            contents.add(addcontent00);
+                            Model__PutTimeslot addcontent30 = new Model__PutTimeslot();
+                            addcontent30.setDay(date5);
+                            addcontent30.setTime(Integer.toString(hour1+h)+":30");
+                            addcontent30.setAvailable(jsondata.get(h).getBool2());
+                            contents.add(addcontent30);
+                        }
+                    }
+                }
+                System.out.println(contents.size());
+                for(Model__PutTimeslot ts: contents) {
+                    Log.e("", "");
+                    Log.e("day", ts.getDay());
+                    Log.e("time", ts.getTime());
+                    Log.e("available", String.valueOf(ts.getAvailable()));
+                    Log.e("", "");
+                }
+                schedule.setContents(contents);
+                retrofitClient.updateSchedule(schedule);
             }
         });
 
-        Intent intent = getIntent();
 
-        hour1 = intent.getExtras().getInt("start");
-        hour2 = intent.getExtras().getInt("finish");
-        i = intent.getExtras().getInt("number");
-        for(int k=0; k<i; k++){
+        System.out.println("scheduleId");
+        System.out.println(scheduleId);
+        for(int k=0; k<dayi; k++){
             if(k==0){
                 date1 = intent.getExtras().getString("text1");
                 day1.setText(date1);
@@ -66,7 +168,7 @@ public class TimeActivity extends AppCompatActivity {
             }
         }
         num = hour2 - hour1;
-        for(int k=0; k<i; k++) {
+        for(int k=0; k<dayi; k++) {
             if(k==0) {
                 toggles1 = findViewById(R.id.toggle_rcv1);
                 timeadapter1 = new TimeAdapter();
@@ -115,7 +217,7 @@ public class TimeActivity extends AppCompatActivity {
         System.out.println("here!!!!");
         System.out.println(num);
         System.out.println(dataList1);
-        for(int k=0; k<i; k++) {
+        for(int k=0; k<dayi; k++) {
             if (k == 0) {
                 timeadapter1.submitList(dataList1);
             }else if(k==1){
