@@ -3,11 +3,7 @@ package com.example.when2meet;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,14 +11,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.when2meet.Retrofit.CallRetrofit;
-import com.example.when2meet.Retrofit.Model__Profile;
+import com.example.when2meet.Retrofit.Models.Model__Profile;
 import com.kakao.sdk.auth.LoginClient;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.User;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -115,11 +108,11 @@ public class MainActivity extends AppCompatActivity {
                     profile.setName(user.getKakaoAccount().getProfile().getNickname());
                     profile.setEmail(user.getKakaoAccount().getEmail());
                     profile.setImageUrl(user.getKakaoAccount().getProfile().getThumbnailImageUrl());
-                    profile.setGender(true);
-                    profile.setAge(21);
 
                     CallRetrofit retrofitClient = new CallRetrofit();
                     retrofitClient.postProfileFunction(profile);
+                    retrofitClient.getProfileWithUserId(profile);
+                    retrofitClient.getAllSchedulesFunc();
 
                 } else {
                     // logout

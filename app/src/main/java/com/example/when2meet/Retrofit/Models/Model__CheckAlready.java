@@ -1,4 +1,4 @@
-package com.example.when2meet.Retrofit;
+package com.example.when2meet.Retrofit.Models;
 
 import com.google.gson.annotations.SerializedName;
 
