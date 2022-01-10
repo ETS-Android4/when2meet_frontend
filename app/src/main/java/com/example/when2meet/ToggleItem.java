@@ -2,7 +2,6 @@ package com.example.when2meet;
 
 public class ToggleItem {
     private String mText1;
-
     private String mText2;
     private String datetext;
     private Boolean bool1 , bool2;

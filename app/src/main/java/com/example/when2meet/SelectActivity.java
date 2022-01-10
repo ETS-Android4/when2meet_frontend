@@ -38,7 +38,7 @@ public class SelectActivity extends AppCompatActivity {
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeLayout);
         plusButton = (ImageButton) findViewById(R.id.plus);
         selectrcv = findViewById(R.id.select_rcv);
-        selectAdapter = new SelectAdapter(userName);
+        selectAdapter = new SelectAdapter(userName, userId);
         selectrcv.setAdapter(selectAdapter);
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +70,7 @@ public class SelectActivity extends AppCompatActivity {
                                 @RequiresApi(api = Build.VERSION_CODES.O)
                                 @Override
                                 public void run() {
-                                    SelectItem item1 = new SelectItem(schedule.getTitle(), String.join(", ", names));
+                                    SelectItem item1 = new SelectItem(schedule.getTitle(), String.join(", ", names),schedule.get_id());
                                     dataList.add(item1);
                                     selectAdapter.submitList(dataList);
                                 }
@@ -112,7 +112,7 @@ public class SelectActivity extends AppCompatActivity {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void run() {
-                            SelectItem item1 = new SelectItem(schedule.getTitle(), String.join(", ", names));
+                            SelectItem item1 = new SelectItem(schedule.getTitle(), String.join(", ", names),schedule.get_id());
                             dataList.add(item1);
                             selectAdapter.submitList(dataList);
                         }
