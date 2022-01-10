@@ -310,7 +310,7 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         month++;
         i++;
-        String date = year + "-" + month + "-" + dayOfMonth;
+        String date = year + "-" + String.format("%02d",month) + "-" + dayOfMonth;
         if(i==1) {
             if(!checkValid(date)){
                 date = null;
