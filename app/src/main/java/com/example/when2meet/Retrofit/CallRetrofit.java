@@ -150,4 +150,41 @@ public class CallRetrofit {
         });
     }
 
+    public void getScheduleWithIdFunc(String scheduleId, ArrayList<Model__Schedule> result) {
+        Call<Model__Schedule> call = RetrofitClient.getApiService().getScheduleWithId(scheduleId);
+        call.enqueue(new Callback<Model__Schedule>() {
+            @Override
+            public void onResponse(Call<Model__Schedule> call, Response<Model__Schedule> response) {
+                if(!response.isSuccessful()){
+                    Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                    return;
+                }
+                result.add(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Model__Schedule> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public void deleteScheduleFunc(String scheduleId, String userId) {
+        Call <Model__Schedule> call = RetrofitClient.getApiService().deleteSchedule(scheduleId, userId);
+        call.enqueue(new Callback<Model__Schedule>() {
+            @Override
+            public void onResponse(Call<Model__Schedule> call, Response<Model__Schedule> response) {
+                if(!response.isSuccessful()){
+                    Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                    return;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Model__Schedule> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
 }

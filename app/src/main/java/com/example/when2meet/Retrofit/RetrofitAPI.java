@@ -12,6 +12,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -20,6 +21,9 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface RetrofitAPI {
+    @DELETE("api/schedules/{scheduleId}/{userId}")
+    Call<Model__Schedule> deleteSchedule(@Path("scheduleId") String scheduleId, @Path("userId") String userId);
+
     @PUT("api/schedules/{scheduleId}")
     Call<Model__PutSchedule> putToSchedule(@Path("scheduleId") String scheduleId, @Body Model__PutSchedule schedule);
 
@@ -39,6 +43,9 @@ public interface RetrofitAPI {
 
     @GET("api/schedules")
     Call<List<Model__Schedule>> getAllSchedules();
+
+    @GET("api/schedules/scheduleId/{scheduleId}")
+    Call<Model__Schedule> getScheduleWithId(@Path("scheduleId") String scheduleId);
     //@FormUrlEncoded
     //@POST("/auth/overlapChecker")
     //Call<Model__CheckAlready> postOverlapCheck(@Field("phone") String phoneNum, @Field("message") String message); //이건 요청시 사용하는거 (*데이터를 보낼때)
