@@ -8,7 +8,7 @@ public class ResultItem {
     private String hText2;
 //    int number1, number2;
 
-    public ResultItem(String dtext,String text1, String text2, Integer int1, Integer int2) {
+    public ResultItem(String dtext, String text1, String text2, Integer int1, Integer int2) {
         datetext = dtext;
         hText1 = text1;
         hText2 = text2;

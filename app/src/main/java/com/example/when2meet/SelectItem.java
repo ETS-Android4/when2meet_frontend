@@ -6,7 +6,7 @@ public class SelectItem {
     private String scheduleId;
 
 
-    public SelectItem(String text1, String text2, String text3){
+    public SelectItem(String text1, String text2, String text3) {
         appText = text1;
         makerText = text2;
         scheduleId = text3;

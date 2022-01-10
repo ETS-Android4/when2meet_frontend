@@ -1,7 +1,5 @@
 package com.example.when2meet;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +7,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.example.when2meet.Retrofit.CallRetrofit;
 import com.example.when2meet.Retrofit.Models.Model__Profile;
 import com.example.when2meet.Retrofit.Models.Model__Schedule;
+import com.example.when2meet.Retrofit.RetrofitClient;
 import com.kakao.sdk.auth.LoginClient;
 import com.kakao.sdk.auth.model.OAuthToken;
 import com.kakao.sdk.user.UserApiClient;
@@ -23,6 +24,9 @@ import java.util.ArrayList;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -118,12 +122,22 @@ public class MainActivity extends AppCompatActivity {
                     profile.setEmail(user.getKakaoAccount().getEmail());
                     profile.setImageUrl(user.getKakaoAccount().getProfile().getThumbnailImageUrl());
 
-                    CallRetrofit retrofitClient = new CallRetrofit();
-                    retrofitClient.postProfileFunction(profile);
+                    Call<Model__Profile> call = RetrofitClient.getApiService().postProfile(profile.getUserId(), profile.getName(), profile.getImageUrl(), profile.getEmail());
+                    call.enqueue(new Callback<Model__Profile>() {
+                        @Override
+                        public void onResponse(Call<Model__Profile> call, Response<Model__Profile> response) {
+                            if (!response.isSuccessful()) {
+                                Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                                return;
+                            }
+                        }
 
-                    ArrayList<Model__Schedule> schedules = new ArrayList<Model__Schedule>();
-
-
+                        @Override
+                        public void onFailure(Call<Model__Profile> call, Throwable t) {
+                            t.printStackTrace();
+                            Log.e("연결실패", t.getMessage());
+                        }
+                    });
                 } else {
                     // logout
                     nickname.setText(null);

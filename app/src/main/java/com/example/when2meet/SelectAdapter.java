@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.when2meet.Retrofit.CallRetrofit;
 import com.example.when2meet.Retrofit.Models.Model__Schedule;
+import com.example.when2meet.Retrofit.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder>{
     private ArrayList<SelectItem> dataList;
@@ -54,34 +60,27 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
             apptext = itemView.findViewById(R.id.appropriateText);
             nametext = itemView.findViewById(R.id.peopleText);
             context = itemView.getContext();
-            System.out.println("Name!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            System.out.println(userName);
         }
         void onBind(SelectItem selectItem) {
-            System.out.println("onbind");
-
             apptext.setText(selectItem.getAppText());
             nametext.setText(selectItem.getMakerText());
             itemView.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View view) {
                     if(nametext.getText().toString().contains(userName)){
-
                         String scheduleId = selectItem.getScheduleId();
-                        ArrayList<Model__Schedule> schedules = new ArrayList<Model__Schedule>();
 
-                        CallRetrofit retrofitClient = new CallRetrofit();
-                        retrofitClient.getScheduleWithIdFunc(scheduleId, schedules);
-                        System.out.println("name exist!!!!!!!!!!!!!!!to result!!!!!!!!!!");
-                        Intent intent = new Intent(context, ResultActivity.class);
-
-                        new Handler().postDelayed(new Runnable()
-                        {
+                        Call<Model__Schedule> call = RetrofitClient.getApiService().getScheduleWithId(scheduleId);
+                        call.enqueue(new Callback<Model__Schedule>() {
                             @Override
-                            public void run() {
-                                Model__Schedule schedule = schedules.get(0);
-                                schedules.clear();
+                            public void onResponse(Call<Model__Schedule> call, Response<Model__Schedule> response) {
+                                if (!response.isSuccessful()) {
+                                    Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                                    return;
+                                }
+                                Intent intent = new Intent(context, ResultActivity.class);
+
+                                Model__Schedule schedule = response.body();
                                 intent.putExtra("name",apptext.getText().toString());
 
                                 String [] startTime = schedule.getStart_time().split(":");
@@ -112,25 +111,28 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
                                 }
                                 context.startActivity(intent);
                             }
-                        }, 100);
+
+                            @Override
+                            public void onFailure(Call<Model__Schedule> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
+
                     }else {
-                        System.out.println("click");
                         //입력 창으로 넘어가기
                         //API
                         String scheduleId = selectItem.getScheduleId();
-                        ArrayList<Model__Schedule> schedules = new ArrayList<Model__Schedule>();
-
-                        CallRetrofit retrofitClient = new CallRetrofit();
-                        retrofitClient.getScheduleWithIdFunc(scheduleId, schedules);
-
-                        Intent intent = new Intent(context, TimeActivity.class);
-
-                        new Handler().postDelayed(new Runnable()
-                        {
+                        Call<Model__Schedule> call = RetrofitClient.getApiService().getScheduleWithId(scheduleId);
+                        call.enqueue(new Callback<Model__Schedule>() {
                             @Override
-                            public void run() {
-                                Model__Schedule schedule = schedules.get(0);
-                                schedules.clear();
+                            public void onResponse(Call<Model__Schedule> call, Response<Model__Schedule> response) {
+                                if (!response.isSuccessful()) {
+                                    Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                                    return;
+                                }
+                                Intent intent = new Intent(context, TimeActivity.class);
+
+                                Model__Schedule schedule = response.body();
                                 intent.putExtra("name",apptext.getText().toString());
 
                                 String [] startTime = schedule.getStart_time().split(":");
@@ -161,8 +163,12 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
                                 }
                                 context.startActivity(intent);
                             }
-                        }, 100);
 
+                            @Override
+                            public void onFailure(Call<Model__Schedule> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
 
                     }
                 }
@@ -173,11 +179,9 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
                 public boolean onLongClick(View view) {
                     String [] array;
                     if(nametext.getText().toString().contains(userName)){
-                        System.out.println("name exist!!!!!!!!!!!!!!!");
                         array = new String[]{"약속 나가기", "약속 삭제하기"};
                     }else {
                         array = new String[]{"약속 삭제하기"};
-                        System.out.println("longclick");
                     }
                     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
                     dialog.setItems(array, new DialogInterface.OnClickListener() {
@@ -187,37 +191,48 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
                             String scheduleId = selectItem.getScheduleId();
                             ArrayList<Model__Schedule> schedules = new ArrayList<Model__Schedule>();
 
-                            CallRetrofit retrofitClient = new CallRetrofit();
                             if(array[which].equals("약속 나가기")){
-                                retrofitClient.deleteScheduleFunc(scheduleId, String.valueOf(userId));
-
-                                new Handler().postDelayed(new Runnable()
-                                {
+                                Call<Model__Schedule> call = RetrofitClient.getApiService().deleteSchedule(scheduleId, String.valueOf(userId));
+                                call.enqueue(new Callback<Model__Schedule>() {
                                     @Override
-                                    public void run() {
+                                    public void onResponse(Call<Model__Schedule> call, Response<Model__Schedule> response) {
+                                        if (!response.isSuccessful()) {
+                                            Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                                            return;
+                                        }
+
                                         Intent intent = new Intent(context, SelectActivity.class);
                                         intent.putExtra("userId",userId);
                                         intent.putExtra("userName",userName);
                                         context.startActivity(intent);
                                     }
-                                }, 300);
 
-                                System.out.println("GETOUT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                    @Override
+                                    public void onFailure(Call<Model__Schedule> call, Throwable t) {
+                                        t.printStackTrace();
+                                    }
+                                });
                             }else{
-                                retrofitClient.deleteScheduleFunc(scheduleId, "-1");
-
-                                new Handler().postDelayed(new Runnable()
-                                {
+                                Call<Model__Schedule> call = RetrofitClient.getApiService().deleteSchedule(scheduleId, "-1");
+                                call.enqueue(new Callback<Model__Schedule>() {
                                     @Override
-                                    public void run() {
+                                    public void onResponse(Call<Model__Schedule> call, Response<Model__Schedule> response) {
+                                        if (!response.isSuccessful()) {
+                                            Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                                            return;
+                                        }
+
                                         Intent intent = new Intent(context, SelectActivity.class);
                                         intent.putExtra("userId",userId);
                                         intent.putExtra("userName",userName);
                                         context.startActivity(intent);
                                     }
-                                }, 100);
 
-                                System.out.println("DELETE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                    @Override
+                                    public void onFailure(Call<Model__Schedule> call, Throwable t) {
+                                        t.printStackTrace();
+                                    }
+                                });
                             }
                         }
                     });
@@ -229,7 +244,6 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
     }
 
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        System.out.println("onbindviewholder");
         holder.onBind(dataList.get(position));
     }
 
