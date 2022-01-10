@@ -18,6 +18,8 @@ import com.example.when2meet.Retrofit.Models.Model__Schedule;
 import com.example.when2meet.Retrofit.RetrofitClient;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -84,11 +86,12 @@ public class SelectActivity extends AppCompatActivity {
                                 @RequiresApi(api = Build.VERSION_CODES.O)
                                 @Override
                                 public void run() {
+                                    Collections.sort(names);
                                     SelectItem item1 = new SelectItem(schedule.getTitle(), String.join(", ", names),schedule.get_id());
                                     dataList.add(item1);
                                     selectAdapter.submitList(dataList);
                                 }
-                            }, 100);
+                            }, 150);
                         }
 
                         if (swipeRefreshLayout.isRefreshing()) {
@@ -140,11 +143,12 @@ public class SelectActivity extends AppCompatActivity {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void run() {
+                            Collections.sort(names);
                             SelectItem item1 = new SelectItem(schedule.getTitle(), String.join(", ", names),schedule.get_id());
                             dataList.add(item1);
                             selectAdapter.submitList(dataList);
                         }
-                    }, 100);
+                    }, 150);
                 }
 
             }
