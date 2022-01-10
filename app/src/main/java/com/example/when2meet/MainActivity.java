@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         nickname = findViewById(R.id.nickname);
         profileImage = findViewById(R.id.profile);
         selectButton = findViewById(R.id.toselect);
+        profileImage.setImageDrawable(getResources().getDrawable(R.drawable.frontpng));
 
         Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {
             @Override
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // logout
                     nickname.setText(null);
-                    profileImage.setImageBitmap(null);
+                    profileImage.setImageDrawable(getResources().getDrawable(R.drawable.frontpng));
                     loginButton.setVisibility(View.VISIBLE);
                     logoutButton.setVisibility(View.GONE);
                     selectButton.setVisibility(View.GONE);
