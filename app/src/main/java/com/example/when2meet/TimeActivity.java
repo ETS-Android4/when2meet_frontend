@@ -14,10 +14,15 @@ import com.example.when2meet.Retrofit.CallRetrofit;
 import com.example.when2meet.Retrofit.Models.Model__PutSchedule;
 import com.example.when2meet.Retrofit.Models.Model__PutTimeslot;
 import com.example.when2meet.Retrofit.Models.Model__Schedule;
+import com.example.when2meet.Retrofit.RetrofitClient;
 
 import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TimeActivity extends AppCompatActivity {
 
@@ -36,8 +41,6 @@ public class TimeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_time);
         Intent intent = getIntent();
         userId = intent.getExtras().getLong("userId");
-        System.out.println("userId!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(userId);
         appointName = intent.getExtras().getString("name");
         hour1 = intent.getExtras().getInt("start");
         hour2 = intent.getExtras().getInt("finish");
@@ -54,19 +57,10 @@ public class TimeActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                jsondata = timeadapter1.getList();
-//                Boolean b = jsondata.get(0).getBool1();
-//                System.out.println(b);
-
-                CallRetrofit retrofitClient = new CallRetrofit();
                 Model__PutSchedule schedule = new Model__PutSchedule();
                 ArrayList<Model__PutTimeslot> contents = new ArrayList<Model__PutTimeslot>();
                 schedule.setScheduleId(scheduleId);
                 schedule.setUserId(Long.toString(userId));
-                System.out.println("dayi!!!!!!!!!!!!");
-                System.out.println(dayi);
-                System.out.println("num!!!!!!!!!!!!!!!");
-                System.out.println(num);
                 for(int d=1; d<=dayi; d++) {
                     for (int h=0; h<num; h++) {
                         if(d==1) {
@@ -75,7 +69,6 @@ public class TimeActivity extends AppCompatActivity {
                             addcontent00.setDay(date1);
                             addcontent00.setTime(Integer.toString(hour1+h)+":00");
                             addcontent00.setAvailable(jsondata.get(h).getBool1());
-                            System.out.println("!!!!!!!!!!!!!!!!!!!!");
                             contents.add(addcontent00);
                             Model__PutTimeslot addcontent30 = new Model__PutTimeslot();
                             addcontent30.setDay(date1);
@@ -133,7 +126,6 @@ public class TimeActivity extends AppCompatActivity {
                         }
                     }
                 }
-                System.out.println(contents.size());
                 for(Model__PutTimeslot ts: contents) {
                     Log.e("", "");
                     Log.e("day", ts.getDay());
@@ -142,13 +134,25 @@ public class TimeActivity extends AppCompatActivity {
                     Log.e("", "");
                 }
                 schedule.setContents(contents);
-                retrofitClient.updateSchedule(schedule);
+
+                Call<Model__PutSchedule> call = RetrofitClient.getApiService().putToSchedule(schedule.getScheduleId(), schedule);
+                call.enqueue(new Callback<Model__PutSchedule>() {
+                    @Override
+                    public void onResponse(Call<Model__PutSchedule> call, Response<Model__PutSchedule> response) {
+                        if (!response.isSuccessful()) {
+                            Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                            return;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Model__PutSchedule> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
             }
         });
 
-
-        System.out.println("scheduleId");
-        System.out.println(scheduleId);
         for(int k=0; k<dayi; k++){
             if(k==0){
                 date1 = intent.getExtras().getString("text1");
@@ -214,9 +218,7 @@ public class TimeActivity extends AppCompatActivity {
             ToggleItem item5 = new ToggleItem(date5,Integer.toString(i), Integer.toString(i+1),false, false);
             dataList5.add(item5);
         }
-        System.out.println("here!!!!");
-        System.out.println(num);
-        System.out.println(dataList1);
+
         for(int k=0; k<dayi; k++) {
             if (k == 0) {
                 timeadapter1.submitList(dataList1);

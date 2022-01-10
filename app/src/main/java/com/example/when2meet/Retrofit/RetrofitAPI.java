@@ -1,14 +1,11 @@
 package com.example.when2meet.Retrofit;
 
-import com.example.when2meet.Retrofit.Models.Model__CheckAlready;
 import com.example.when2meet.Retrofit.Models.Model__PostSchedule;
 import com.example.when2meet.Retrofit.Models.Model__Profile;
 import com.example.when2meet.Retrofit.Models.Model__PutSchedule;
-import com.example.when2meet.Retrofit.Models.Model__PutTimeslot;
 import com.example.when2meet.Retrofit.Models.Model__Schedule;
 import com.example.when2meet.Retrofit.Models.Model__Timeslot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,9 +28,6 @@ public interface RetrofitAPI {
     @POST("api/schedules/")
     Call<Model__PostSchedule> postSchedule(@Body Model__PostSchedule modelSchedule);
 
-    @POST("apiLink/info")
-    Call<Model__CheckAlready> postOverlapCheck(@Body Model__CheckAlready modelCheckAlready); //이건 바디 요청시 사용하는거
-
     @FormUrlEncoded
     @POST("api/profiles")
     Call<Model__Profile> postProfile(@Field("userId") Long userId, @Field("name") String name,
@@ -50,7 +44,4 @@ public interface RetrofitAPI {
 
     @GET("api/schedules/scheduleId/{scheduleId}")
     Call<Model__Schedule> getScheduleWithId(@Path("scheduleId") String scheduleId);
-    //@FormUrlEncoded
-    //@POST("/auth/overlapChecker")
-    //Call<Model__CheckAlready> postOverlapCheck(@Field("phone") String phoneNum, @Field("message") String message); //이건 요청시 사용하는거 (*데이터를 보낼때)
 }

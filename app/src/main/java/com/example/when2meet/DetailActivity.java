@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,10 +25,15 @@ import android.widget.Toast;
 import com.example.when2meet.Retrofit.CallRetrofit;
 import com.example.when2meet.Retrofit.Models.Model__PostSchedule;
 import com.example.when2meet.Retrofit.Models.Model__Schedule;
+import com.example.when2meet.Retrofit.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
@@ -58,9 +64,7 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
         timeButton = findViewById(R.id.buttontime1);
         appointName = findViewById(R.id.editText);
         Intent intent = getIntent();
-        System.out.println("userId!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         userId = intent.getExtras().getLong("userId");
-        System.out.println(userId);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,17 +99,18 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
 
                 CallRetrofit retrofitClient = new CallRetrofit();
                 ArrayList<String> schId = new ArrayList<String>();
-                retrofitClient.postScheduleFunction(schedule, schId);
 
-                new Handler().postDelayed(new Runnable()
-                {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
+                Call<Model__PostSchedule> call = RetrofitClient.getApiService().postSchedule(schedule);
+                call.enqueue(new Callback<Model__PostSchedule>() {
                     @Override
-                    public void run()
-                    {
-                        scheduleId = schId.get(0);
-                        System.out.println("scheduleId11111");
-                        System.out.println(scheduleId);
+                    public void onResponse(Call<Model__PostSchedule> call, Response<Model__PostSchedule> response) {
+                        if (!response.isSuccessful()) {
+                            Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                            return;
+                        }
+                        Model__PostSchedule schedule = response.body();
+
+                        scheduleId = schedule.getId();
                         Intent intent = new Intent(DetailActivity.this, TimeActivity.class);
                         intent.putExtra("name",appointName.getText().toString());
                         intent.putExtra("start",hour1);
@@ -135,9 +140,12 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
                         }
                         startActivity(intent);
                     }
-                }, 500);
-                //aaaaaaaaaaaaaaaaaaa
 
+                    @Override
+                    public void onFailure(Call<Model__PostSchedule> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
             }
         });
 
@@ -316,7 +324,6 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
                 date = null;
                 i--;
                 Toast.makeText(DetailActivity.this, "중복인 날짜가 있어요.", Toast.LENGTH_SHORT).show();
-                System.out.println("no1!!!");
             }
             text1.setText(date);
         }else if(i==2) {
@@ -324,7 +331,6 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
                 date = null;
                 i--;
                 Toast.makeText(DetailActivity.this, "중복인 날짜가 있어요.", Toast.LENGTH_SHORT).show();
-                System.out.println("no2!!!");
             }
             text2.setText(date);
         }else if(i==3) {
@@ -332,7 +338,6 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
                 date = null;
                 i--;
                 Toast.makeText(DetailActivity.this, "중복인 날짜가 있어요.", Toast.LENGTH_SHORT).show();
-                System.out.println("no3!!!");
             }
             text3.setText(date);
         }else if(i==4) {
@@ -340,7 +345,6 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
                 date = null;
                 i--;
                 Toast.makeText(DetailActivity.this, "중복인 날짜가 있어요.", Toast.LENGTH_SHORT).show();
-                System.out.println("no4!!!");
             }
             text4.setText(date);
         }else if(i==5) {
@@ -348,7 +352,6 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
                 date = null;
                 i--;
                 Toast.makeText(DetailActivity.this, "중복인 날짜가 있어요.", Toast.LENGTH_SHORT).show();
-                System.out.println("no5!!!");
             }
             text5.setText(date);
             if(i==5) {

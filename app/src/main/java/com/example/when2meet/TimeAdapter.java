@@ -15,6 +15,7 @@ import java.util.List;
 
 public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder> {
     private ArrayList<ToggleItem> dataList;
+
     public TimeAdapter() {
     }
 
@@ -35,8 +36,9 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         Context context;
-        TextView text1,text2;
+        TextView text1, text2;
         ToggleButton tbutton1, tbutton2;
+
         public ViewHolder(View itemView) {
             super(itemView);
             context = itemView.getContext();
@@ -47,23 +49,18 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder> {
         }
 
         void onBind(ToggleItem toggleItem) {
-            System.out.println("onbind");
             text1.setText(toggleItem.getText1());
-            System.out.println(text1);
-            //text2.setText(toggleItem.getText2());
             text2.setText(null);
 
             tbutton1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     boolean on = ((ToggleButton) view).isChecked();
-                    if(on){
+                    if (on) {
                         int pos = getAdapterPosition();
-                        System.out.println(pos);
                         toggleItem.setBool1(true);
-                    }else{
+                    } else {
                         int pos = getAdapterPosition();
-                        System.out.println(pos);
                         toggleItem.setBool1(false);
                     }
                 }
@@ -72,13 +69,11 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     boolean on = ((ToggleButton) view).isChecked();
-                    if(on){
+                    if (on) {
                         int pos = getAdapterPosition();
-                        System.out.println(pos);
                         toggleItem.setBool2(true);
-                    }else{
+                    } else {
                         int pos = getAdapterPosition();
-                        System.out.println(pos);
                         toggleItem.setBool2(false);
                     }
                 }
@@ -88,7 +83,6 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder> {
     }
 
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        System.out.println("onbindviewholder");
         holder.onBind(dataList.get(position));
     }
 

@@ -9,9 +9,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static final String BASE_URL = "http://192.249.18.146/";
 
-    public static RetrofitAPI getApiService(){return getInstance().create(RetrofitAPI.class);}
+    public static RetrofitAPI getApiService() {
+        return getInstance().create(RetrofitAPI.class);
+    }
 
-    private static Retrofit getInstance(){
+    private static Retrofit getInstance() {
         Gson gson = new GsonBuilder().setLenient().create();
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)

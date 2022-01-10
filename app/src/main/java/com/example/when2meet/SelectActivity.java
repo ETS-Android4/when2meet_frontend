@@ -15,10 +15,17 @@ import android.widget.ImageButton;
 
 import com.example.when2meet.Retrofit.CallRetrofit;
 import com.example.when2meet.Retrofit.Models.Model__Schedule;
+import com.example.when2meet.Retrofit.RetrofitClient;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SelectActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -54,12 +61,21 @@ public class SelectActivity extends AppCompatActivity {
                 CallRetrofit retrofitClient = new CallRetrofit();
                 ArrayList<Model__Schedule> schedules = new ArrayList<Model__Schedule>();
                 ArrayList<SelectItem> dataList = new ArrayList<SelectItem>();
-                retrofitClient.getAllSchedulesFunc(schedules);
-                new Handler().postDelayed(new Runnable()
-                {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
+
+                Call<List<Model__Schedule>> call = RetrofitClient.getApiService().getAllSchedules();
+                call.enqueue(new Callback<List<Model__Schedule>>() {
                     @Override
-                    public void run() {
+                    public void onResponse(Call<List<Model__Schedule>> call, Response<List<Model__Schedule>> response) {
+                        if (!response.isSuccessful()) {
+                            Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                            return;
+                        }
+                        ArrayList<Model__Schedule> schedulesResponse = (ArrayList<Model__Schedule>) response.body();
+                        for (Model__Schedule sched : schedulesResponse) {
+                            schedules.add(sched);
+                        }
+
+
                         for (Model__Schedule schedule : schedules) {
                             ArrayList<String> names = new ArrayList<String>();
                             for (String member : schedule.getMembers()) {
@@ -70,17 +86,24 @@ public class SelectActivity extends AppCompatActivity {
                                 @RequiresApi(api = Build.VERSION_CODES.O)
                                 @Override
                                 public void run() {
+                                    Collections.sort(names);
                                     SelectItem item1 = new SelectItem(schedule.getTitle(), String.join(", ", names),schedule.get_id());
                                     dataList.add(item1);
                                     selectAdapter.submitList(dataList);
                                 }
-                            }, 100);
+                            }, 150);
+                        }
+
+                        if (swipeRefreshLayout.isRefreshing()) {
+                            swipeRefreshLayout.setRefreshing(false);
                         }
                     }
-                }, 100);
-                if (swipeRefreshLayout.isRefreshing()) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
+
+                    @Override
+                    public void onFailure(Call<List<Model__Schedule>> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
             }
         });
     }
@@ -96,12 +119,20 @@ public class SelectActivity extends AppCompatActivity {
         CallRetrofit retrofitClient = new CallRetrofit();
         ArrayList<Model__Schedule> schedules = new ArrayList<Model__Schedule>();
         ArrayList<SelectItem> dataList = new ArrayList<SelectItem>();
-        retrofitClient.getAllSchedulesFunc(schedules);
-        new Handler().postDelayed(new Runnable()
-        {
-            @RequiresApi(api = Build.VERSION_CODES.O)
+
+        Call<List<Model__Schedule>> call = RetrofitClient.getApiService().getAllSchedules();
+        call.enqueue(new Callback<List<Model__Schedule>>() {
             @Override
-            public void run() {
+            public void onResponse(Call<List<Model__Schedule>> call, Response<List<Model__Schedule>> response) {
+                if (!response.isSuccessful()) {
+                    Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                    return;
+                }
+                ArrayList<Model__Schedule> schedulesResopnse = (ArrayList<Model__Schedule>) response.body();
+                for (Model__Schedule sched : schedulesResopnse) {
+                    schedules.add(sched);
+                }
+
                 for (Model__Schedule schedule : schedules) {
                     ArrayList<String> names = new ArrayList<String>();
                     for (String member : schedule.getMembers()) {
@@ -112,14 +143,20 @@ public class SelectActivity extends AppCompatActivity {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void run() {
+                            Collections.sort(names);
                             SelectItem item1 = new SelectItem(schedule.getTitle(), String.join(", ", names),schedule.get_id());
                             dataList.add(item1);
                             selectAdapter.submitList(dataList);
                         }
-                    }, 100);
+                    }, 150);
                 }
-            }
-        }, 100);
 
+            }
+
+            @Override
+            public void onFailure(Call<List<Model__Schedule>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 }
