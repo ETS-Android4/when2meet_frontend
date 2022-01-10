@@ -6,7 +6,9 @@ import com.example.when2meet.Retrofit.Models.Model__CheckAlready;
 import com.example.when2meet.Retrofit.Models.Model__PostSchedule;
 import com.example.when2meet.Retrofit.Models.Model__Profile;
 import com.example.when2meet.Retrofit.Models.Model__PutSchedule;
+import com.example.when2meet.Retrofit.Models.Model__PutTimeslot;
 import com.example.when2meet.Retrofit.Models.Model__Schedule;
+import com.example.when2meet.Retrofit.Models.Model__Timeslot;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class CallRetrofit {
     public void updateSchedule(Model__PutSchedule schedule) {
@@ -99,6 +102,27 @@ public class CallRetrofit {
             public void onFailure(Call<Model__Profile> call, Throwable t) {
                 t.printStackTrace();
                 Log.e("연결실패", t.getMessage());
+            }
+        });
+    }
+
+    public void getTimeslotWithIdFunc(String timeslotId, ArrayList<Model__Timeslot> timeslots) {
+        Call<Model__Timeslot> call = RetrofitClient.getApiService().getTimeslotWithId(timeslotId);
+        call.enqueue(new Callback<Model__Timeslot>() {
+            @Override
+            public void onResponse(Call<Model__Timeslot> call, Response<Model__Timeslot> response) {
+                if(!response.isSuccessful()){
+                    Log.e("연결이 비정상적 : ", "error code : " + response.code());
+                    return;
+                }
+
+                Model__Timeslot ts = response.body();
+                timeslots.add(ts);
+            }
+
+            @Override
+            public void onFailure(Call<Model__Timeslot> call, Throwable t) {
+                t.printStackTrace();
             }
         });
     }

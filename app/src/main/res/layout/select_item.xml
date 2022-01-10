@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/edge">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,12 +14,19 @@
         tools:ignore="MissingConstraints">
 
         <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
             android:id="@+id/appropriateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:textSize="40sp" />
 
         <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+
+            android:layout_marginStart="10dp"
             android:id="@+id/peopleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

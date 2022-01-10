@@ -50,8 +50,11 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
             System.out.println(text1);
             //text2.setText(resultItem.gethText2());
             text2.setText(null);
-            num1.setText(Integer.toString(ResultItem.getNumber1()));
-            num2.setText(Integer.toString(ResultItem.getNumber2()));
+            num1.setText(Integer.toString(resultItem.getNumber1()));
+            System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+            System.out.println(Integer.toString(resultItem.getNumber1()));
+            System.out.println(Integer.toString(resultItem.getNumber2()));
+            num2.setText(Integer.toString(resultItem.getNumber2()));
 
         }
     }
@@ -63,6 +66,8 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
+        if(dataList == null)
+            return 0;
         return dataList.size();
     }
 }

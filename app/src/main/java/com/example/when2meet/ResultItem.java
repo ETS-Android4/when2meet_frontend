@@ -1,8 +1,8 @@
 package com.example.when2meet;
 
 public class ResultItem {
-    private static int number1;
-    private static int number2;
+    private int number1;
+    private int number2;
     private String datetext;
     private String hText1;
     private String hText2;
@@ -28,11 +28,11 @@ public class ResultItem {
         return hText2;
     }
 
-    public static int getNumber1() {
+    public int getNumber1() {
         return number1;
     }
 
-    public static int getNumber2() {
+    public int getNumber2() {
         return number2;
     }
 

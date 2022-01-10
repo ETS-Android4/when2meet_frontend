@@ -6,6 +6,7 @@ import com.example.when2meet.Retrofit.Models.Model__Profile;
 import com.example.when2meet.Retrofit.Models.Model__PutSchedule;
 import com.example.when2meet.Retrofit.Models.Model__PutTimeslot;
 import com.example.when2meet.Retrofit.Models.Model__Schedule;
+import com.example.when2meet.Retrofit.Models.Model__Timeslot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,9 @@ public interface RetrofitAPI {
 
     @GET("api/profiles/userId/{userId}")
     Call<Model__Profile> getProfileWithId(@Path("userId") String userId);
+
+    @GET("api/timeslots/{timeslotId}")
+    Call<Model__Timeslot> getTimeslotWithId(@Path("timeslotId") String timeslotId);
 
     @GET("api/schedules")
     Call<List<Model__Schedule>> getAllSchedules();

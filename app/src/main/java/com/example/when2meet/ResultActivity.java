@@ -5,8 +5,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.when2meet.Retrofit.CallRetrofit;
+import com.example.when2meet.Retrofit.Models.Model__Schedule;
+import com.example.when2meet.Retrofit.Models.Model__Timeslot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,33 +101,147 @@ public class ResultActivity extends AppCompatActivity {
         ArrayList<ResultItem> dataList4 = new ArrayList<ResultItem>();
         ArrayList<ResultItem> dataList5 = new ArrayList<ResultItem>();
 
-        for (int i = hour1; i < hour2; i++) {
-            ResultItem item1 = new ResultItem(date1, Integer.toString(i), Integer.toString(i + 1), 1, 2);
-            dataList1.add(item1);
-            ResultItem item2 = new ResultItem(date2, Integer.toString(i), Integer.toString(i + 1), 1, 2);
-            dataList2.add(item2);
-            ResultItem item3 = new ResultItem(date3, Integer.toString(i), Integer.toString(i + 1), 1, 2);
-            dataList3.add(item3);
-            ResultItem item4 = new ResultItem(date4, Integer.toString(i), Integer.toString(i + 1), 1, 2);
-            dataList4.add(item4);
-            ResultItem item5 = new ResultItem(date5, Integer.toString(i), Integer.toString(i + 1), 1, 2);
-            dataList5.add(item5);
-        }
-        System.out.println("here!!!!");
-        System.out.println(num);
-        System.out.println(dataList1);
-        for (int k = 0; k < dayi; k++) {
-            if (k == 0) {
-                resultAdapter1.submitList(dataList1);
-            } else if (k == 1) {
-                resultAdapter2.submitList(dataList2);
-            } else if (k == 2) {
-                resultAdapter3.submitList(dataList3);
-            } else if (k == 3) {
-                resultAdapter4.submitList(dataList4);
-            } else {
-                resultAdapter5.submitList(dataList5);
+        CallRetrofit retrofitClient = new CallRetrofit();
+        ArrayList<Model__Schedule> schedules = new ArrayList<Model__Schedule>();
+        ArrayList<Model__Timeslot> timeslots = new ArrayList<Model__Timeslot>();
+        retrofitClient.getScheduleWithIdFunc(scheduleId, schedules);
+
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run() {
+                Model__Schedule schedule = schedules.get(0);
+                schedules.clear();
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!_______________________________________________");
+                System.out.println(schedule.getTitle());
+                Integer total_members = schedule.getMembers().size();
+
+                ArrayList<String> timeslotIds = schedule.getTimeslots();
+                for(String timeslotId: timeslotIds) {
+                    retrofitClient.getTimeslotWithIdFunc(timeslotId, timeslots);
+                }
+
+                new Handler().postDelayed(new Runnable()
+                {
+                    int number1_1, number1_2, number2_1, number2_2, number3_1, number3_2, number4_1, number4_2, number5_1, number5_2;
+                    @Override
+                    public void run() {
+                        for (int i = hour1; i < hour2; i++) {
+                            System.out.println(date1+"T"+String.format("%02d", i)+":00:00.000");
+                            for(Model__Timeslot t: timeslots){
+                                if (t.getStart().contains((date1 + "T" + String.format("%02d", i) + ":00:00.000"))) {
+                                    System.out.println(t.getMembers());
+                                    number1_1 = t.getMembers().size();
+                                    System.out.println("number1_1");
+                                    System.out.println(number1_1);
+                                }
+                                if (t.getStart().contains(date1 + "T" + String.format("%02d", i) + ":30:00.000")) {
+                                    number1_2 = t.getMembers().size();
+                                    System.out.println("number1_2");
+                                    System.out.println(number1_2);
+                                }
+                            }
+                            ResultItem item1 = new ResultItem(date1, Integer.toString(i), Integer.toString(i + 1), number1_1, number1_2);
+                            dataList1.add(item1);
+                            System.out.println("number1");
+                            System.out.println(item1.getNumber1());
+                            System.out.println("number2");
+                            System.out.println(item1.getNumber2());
+                            for(Model__Timeslot t: timeslots){
+                                if (t.getStart().contains(date2 + "T" + String.format("%02d", i) + ":00:00.000")) {
+                                    number2_1 = t.getMembers().size();
+                                }
+                                if (t.getStart().contains(date2 + "T" + String.format("%02d", i) + ":30:00.000")) {
+                                    number2_2 = t.getMembers().size();
+                                }
+                            }
+                            ResultItem item2 = new ResultItem(date2, Integer.toString(i), Integer.toString(i + 1), number2_1, number2_2);
+                            dataList2.add(item2);
+                            for(Model__Timeslot t: timeslots){
+                                if (t.getStart().contains(date3 + "T" + String.format("%02d", i) + ":00:00.000")) {
+                                    number3_1 = t.getMembers().size();
+                                }
+                                if (t.getStart().contains(date3 + "T" + String.format("%02d", i) + ":30:00.000")) {
+                                    number3_2 = t.getMembers().size();
+                                }
+                            }
+                            ResultItem item3 = new ResultItem(date3, Integer.toString(i), Integer.toString(i + 1), number3_1, number3_2);
+                            dataList3.add(item3);
+                            for(Model__Timeslot t: timeslots){
+                                if (t.getStart().contains(date4 + "T" + String.format("%02d", i) + ":00:00.000")) {
+                                    number4_1 = t.getMembers().size();
+                                }
+                                if (t.getStart().contains(date4 + "T" + String.format("%02d", i) + ":30:00.000")) {
+                                    number4_2 = t.getMembers().size();
+                                }
+                            }
+                            ResultItem item4 = new ResultItem(date4, Integer.toString(i), Integer.toString(i + 1), number4_1, number4_2);
+                            dataList4.add(item4);
+                            for(Model__Timeslot t: timeslots){
+                                if (t.getStart().contains(date5 + "T" + String.format("%02d", i) + ":00:00.000")) {
+                                    number5_1 = t.getMembers().size();
+                                }
+                                if (t.getStart().contains(date5 + "T" + String.format("%02d", i) + ":30:00.000")) {
+                                    number5_2 = t.getMembers().size();
+                                }
+                            }
+                            ResultItem item5 = new ResultItem(date5, Integer.toString(i), Integer.toString(i + 1), number5_1, number5_2);
+                            dataList5.add(item5);
+                            for (int k = 0; k < dayi; k++) {
+                                System.out.println("!!!!!!!!!!");
+                                if (k == 0) {
+                                    resultAdapter1.submitList(dataList1);
+                                } else if (k == 1) {
+                                    resultAdapter2.submitList(dataList2);
+                                } else if (k == 2) {
+                                    resultAdapter3.submitList(dataList3);
+                                } else if (k == 3) {
+                                    resultAdapter4.submitList(dataList4);
+                                } else {
+                                    resultAdapter5.submitList(dataList5);
+                                }
+                            }
+                        }
+                        timeslots.clear();
+                    }
+                }, 300);
             }
-        }
+        }, 300);
+
+
+
+//        for (int i = hour1; i < hour2; i++) {
+//            for(Model__Timeslot t: timeslots){
+//                if(t.getDate().contains(date1+String.format("%02d", i)+":00:00.000")){
+//                    int nmuber1 = t.getMembers().size();
+//                }
+//            }
+//            ResultItem item1 = new ResultItem(date1, Integer.toString(i), Integer.toString(i + 1), 1, 2);
+//            dataList1.add(item1);
+//            ResultItem item2 = new ResultItem(date2, Integer.toString(i), Integer.toString(i + 1), 1, 2);
+//            dataList2.add(item2);
+//            ResultItem item3 = new ResultItem(date3, Integer.toString(i), Integer.toString(i + 1), 1, 2);
+//            dataList3.add(item3);
+//            ResultItem item4 = new ResultItem(date4, Integer.toString(i), Integer.toString(i + 1), 1, 2);
+//            dataList4.add(item4);
+//            ResultItem item5 = new ResultItem(date5, Integer.toString(i), Integer.toString(i + 1), 1, 2);
+//            dataList5.add(item5);
+//        }
+//        System.out.println("here!!!!");
+//        System.out.println(num);
+//        System.out.println(dataList1);
+//        for (int k = 0; k < dayi; k++) {
+//            if (k == 0) {
+//                resultAdapter1.submitList(dataList1);
+//            } else if (k == 1) {
+//                resultAdapter2.submitList(dataList2);
+//            } else if (k == 2) {
+//                resultAdapter3.submitList(dataList3);
+//            } else if (k == 3) {
+//                resultAdapter4.submitList(dataList4);
+//            } else {
+//                resultAdapter5.submitList(dataList5);
+//            }
+//        }
     }
 }
