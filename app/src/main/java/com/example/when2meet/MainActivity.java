@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         nickname = findViewById(R.id.nickname);
         profileImage = findViewById(R.id.profile);
         selectButton = findViewById(R.id.toselect);
+        selectButton.setVisibility(View.GONE);
+        logoutButton.setVisibility(View.GONE);
         profileImage.setImageDrawable(getResources().getDrawable(R.drawable.frontpng));
 
         Function2<OAuthToken, Throwable, Unit> callback = new Function2<OAuthToken, Throwable, Unit>() {

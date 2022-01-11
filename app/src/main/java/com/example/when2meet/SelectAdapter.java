@@ -91,8 +91,9 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
 
                                 ArrayList<String> days = schedule.getDays();
                                 intent.putExtra("number", days.size());
-
+                                intent.putExtra("maxPeople", schedule.getMembers().size());
                                 intent.putExtra("userId",userId);
+                                intent.putExtra("userName",userName);
 
                                 intent.putExtra("scheduleId",scheduleId);
 
@@ -145,7 +146,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
                                 intent.putExtra("number", days.size());
 
                                 intent.putExtra("userId",userId);
-
+                                intent.putExtra("userName",userName);
                                 intent.putExtra("scheduleId",scheduleId);
 
                                 for(int i=0; i<days.size(); i++){

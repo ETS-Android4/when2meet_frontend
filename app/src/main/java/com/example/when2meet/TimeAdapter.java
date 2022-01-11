@@ -49,7 +49,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder> {
         }
 
         void onBind(ToggleItem toggleItem) {
-            text1.setText(toggleItem.getText1());
+            text1.setText(toggleItem.getText1()+":00");
             text2.setText(null);
 
             tbutton1.setOnClickListener(new View.OnClickListener() {

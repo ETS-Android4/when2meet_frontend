@@ -35,6 +35,7 @@ public class TimeActivity extends AppCompatActivity {
     List<ToggleItem> jsondata;
     Long userId;
     String scheduleId;
+    String userName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +47,9 @@ public class TimeActivity extends AppCompatActivity {
         hour2 = intent.getExtras().getInt("finish");
         dayi = intent.getExtras().getInt("number");
         scheduleId = intent.getExtras().getString("scheduleId");
+        userName = intent.getExtras().getString("userName");
+        System.out.println("userName!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(userName);
         num = hour2 - hour1;
         day1 = findViewById(R.id.day1);
         day2 = findViewById(R.id.day2);
@@ -125,6 +129,7 @@ public class TimeActivity extends AppCompatActivity {
                             contents.add(addcontent30);
                         }
                     }
+
                 }
                 for(Model__PutTimeslot ts: contents) {
                     Log.e("", "");
@@ -150,6 +155,13 @@ public class TimeActivity extends AppCompatActivity {
                         t.printStackTrace();
                     }
                 });
+                ///////here!
+                Intent intent = new Intent(TimeActivity.this, SelectActivity.class);
+                intent.putExtra("userId",userId);
+                intent.putExtra("userName",userName);
+                System.out.println(userName);
+                startActivity(intent);
+                finish();
             }
         });
 

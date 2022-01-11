@@ -46,6 +46,7 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
     EditText appointName;
     Long userId;
     String scheduleId;
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
         appointName = findViewById(R.id.editText);
         Intent intent = getIntent();
         userId = intent.getExtras().getLong("userId");
+        userName = intent.getExtras().getString("userName");
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +120,7 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
                         intent.putExtra("number",i);
                         intent.putExtra("userId",userId);
                         intent.putExtra("scheduleId",scheduleId);
+                        intent.putExtra("userName",userName);
                         if(text1 != null)
                         {
                             intent.putExtra("text1",text1.getText().toString());
@@ -139,6 +142,7 @@ public class DetailActivity extends AppCompatActivity implements DatePickerDialo
                             intent.putExtra("text5",text5.getText().toString());
                         }
                         startActivity(intent);
+                        finish();
                     }
 
                     @Override

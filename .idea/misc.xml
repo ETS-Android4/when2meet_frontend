@@ -5,12 +5,15 @@
       <map>
         <entry key="..\:/Users/woojin/Desktop/dev/CS496/when2meet_frontend/app/src/main/res/layout/activity_time.xml" value="0.5" />
         <entry key="..\:/when2meet/app/src/main/res/drawable/edge.xml" value="0.152" />
+        <entry key="..\:/when2meet/app/src/main/res/drawable/edge2.xml" value="0.23794871794871794" />
+        <entry key="..\:/when2meet/app/src/main/res/drawable/imgedge.xml" value="0.23794871794871794" />
         <entry key="..\:/when2meet/app/src/main/res/drawable/round.xml" value="0.19907407407407407" />
         <entry key="..\:/when2meet/app/src/main/res/font/font_custom.xml" value="0.265625" />
         <entry key="..\:/when2meet/app/src/main/res/layout/activity_detail.xml" value="0.24592391304347827" />
         <entry key="..\:/when2meet/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/when2meet/app/src/main/res/layout/activity_result.xml" value="0.13134057971014493" />
         <entry key="..\:/when2meet/app/src/main/res/layout/activity_select.xml" value="0.11320754716981132" />
+        <entry key="..\:/when2meet/app/src/main/res/layout/activity_splash.xml" value="0.12360688956433637" />
         <entry key="..\:/when2meet/app/src/main/res/layout/activity_time.xml" value="0.1" />
         <entry key="..\:/when2meet/app/src/main/res/layout/result_item.xml" value="0.4" />
         <entry key="..\:/when2meet/app/src/main/res/layout/select_item.xml" value="0.1" />

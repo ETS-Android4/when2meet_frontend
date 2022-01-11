@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -44,6 +45,7 @@
         android:background="@drawable/round"
         android:backgroundTint="#12ABF1"
         android:layout_marginBottom="10dp"
+
         android:text="약속 참가하기"/>
 
 
@@ -65,5 +67,6 @@
         android:textSize="30sp"
         android:background="@drawable/round"
         android:backgroundTint="#12ABF1"
+        android:layout_marginBottom="10dp"
         android:text="로그아웃"/>
 </LinearLayout>
