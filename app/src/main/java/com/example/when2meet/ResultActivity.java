@@ -33,6 +33,7 @@ public class ResultActivity extends AppCompatActivity {
     List<ResultItem> jsondata;
     Long userId;
     String scheduleId;
+    int maxPeople;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,7 @@ public class ResultActivity extends AppCompatActivity {
         hour2 = intent.getExtras().getInt("finish");
         dayi = intent.getExtras().getInt("number");
         scheduleId = intent.getExtras().getString("scheduleId");
+        maxPeople = intent.getExtras().getInt("maxPeople");
         num = hour2 - hour1;
         day1 = findViewById(R.id.day1);
         day2 = findViewById(R.id.day2);
@@ -74,23 +76,23 @@ public class ResultActivity extends AppCompatActivity {
         for(int k=0; k<dayi; k++) {
             if(k==0) {
                 result1 = findViewById(R.id.result_rcv1);
-                resultAdapter1 = new ResultAdapter();
+                resultAdapter1 = new ResultAdapter(maxPeople);
                 result1.setAdapter(resultAdapter1);
             }else if(k==1) {
                 result2 = findViewById(R.id.result_rcv2);
-                resultAdapter2 = new ResultAdapter();
+                resultAdapter2 = new ResultAdapter(maxPeople);
                 result2.setAdapter(resultAdapter2);
             }else if(k==2) {
                 result3 = findViewById(R.id.result_rcv3);
-                resultAdapter3 = new ResultAdapter();
+                resultAdapter3 = new ResultAdapter(maxPeople);
                 result3.setAdapter(resultAdapter3);
             }else if(k==3) {
                 result4 = findViewById(R.id.result_rcv4);
-                resultAdapter4 = new ResultAdapter();
+                resultAdapter4 = new ResultAdapter(maxPeople);
                 result4.setAdapter(resultAdapter4);
             }else {
                 result5 = findViewById(R.id.result_rcv5);
-                resultAdapter5 = new ResultAdapter();
+                resultAdapter5 = new ResultAdapter(maxPeople);
                 result5.setAdapter(resultAdapter5);
             }
         }

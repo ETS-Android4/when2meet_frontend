@@ -12,18 +12,22 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="-5dp">
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:textSize="9sp"
                 android:text="TextView" />
 
             <ToggleButton
                 android:id="@+id/toggle1"
-                android:layout_width="50dp"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
+                android:textSize="10sp"
                 android:textOff="불가"
                 android:textOn="가능" />
 
@@ -32,18 +36,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="-5dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="20dp"
+                android:textSize="9sp"
+                android:layout_marginTop="-10dp"
                 android:layout_height="wrap_content"
                 android:text="TextView" />
 
             <ToggleButton
                 android:id="@+id/toggle2"
-                android:layout_width="50dp"
+                android:layout_width="45dp"
                 android:layout_height="wrap_content"
+                android:textSize="10sp"
                 android:textOff="불가"
                 android:textOn="가능" />
         </LinearLayout>
